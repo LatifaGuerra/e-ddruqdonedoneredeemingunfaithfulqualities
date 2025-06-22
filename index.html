@@ -72,8 +72,7 @@
   <div class="footer">scan quietly. it's not for everyone.</div>
   <div class="title-tag">done, done redeeming unfaithful qualities</div>
 
-  <!-- Ambient audio -->
-  <audio autoplay loop playsinline>
+  <audio autoplay loop>
     <source src="ambient.mp3" type="audio/mpeg" />
   </audio>
 
@@ -91,27 +90,37 @@
       "don’t cum just yet."
     ];
 
-    const asciiArt = `
- _    __      ___ __  __  _  
- /  /_|  / _ /  /(_  /__)/__)/_| 
-(__(  | (__)(__/ /__/ ( / ( (  | 
-`;
-
     const output = document.getElementById("quote");
     const cursor = document.querySelector(".cursor");
     const audio = document.querySelector("audio");
+
+    const asciiArt = 
+     _    __      ___ __  __  _  
+ /  /_|  / _ /  /(_  /__)/__)/_| 
+(__(  | (__)(__/ /__/ ( / ( (  | 
+;
 
     const seen = localStorage.getItem("ddruq_seen_quote");
 
     if (seen) {
       if (cursor) cursor.style.display = "none";
       if (audio) audio.remove();
-      output.innerHTML = `<pre class="ascii">${asciiArt}</pre>`;
+      output.innerHTML = <pre class="ascii">${asciiArt}</pre>;
     } else {
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       localStorage.setItem("ddruq_seen_quote", "true");
-
       let index = 0;
+
       function typeWriter() {
         if (index < quote.length) {
-          output.innerHTM
+          output.innerHTML += quote.charAt(index);
+          index++;
+          setTimeout(typeWriter, 40);
+        }
+      }
+
+      typeWriter();
+    }
+  </script>
+</body>
+</html>
