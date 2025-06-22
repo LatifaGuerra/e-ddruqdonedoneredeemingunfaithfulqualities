@@ -33,15 +33,15 @@
       font-size: 0.9em;
       color: #6e7681;
     }
-  </style>.title-tag {
-  position: fixed;
-  bottom: 1.5em;
-  right: 2em;
-  font-size: 0.9em;
-  color: #8b949e;
-  font-style: italic;
-  }
-
+    .title-tag {
+      position: fixed;
+      bottom: 1.5em;
+      right: 2em;
+      font-size: 0.9em;
+      color: #8b949e;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
   <div class="quote" id="quote"></div><div class="cursor"></div>
@@ -59,23 +59,4 @@
   <script>
     const quotes = [
       "Your smile seasons the food.",
-      "We cling to what love remains in us — just to feel.",
-      "i feel you wanting more—\\nto crawl into the hollowness beneath my ribs,\\nto echo inside me\\nlike I’m echoing inside you.",
-      "we talked\\nuntil the sun appeared—\\neach blink layered\\nwith chuckles,\\nknowing it’s finally here."
-    ];
-    const quote = quotes[Math.floor(Math.random() * quotes.length)];
-    const output = document.getElementById("quote");
-    let index = 0;
-
-    function typeWriter() {
-      if (index < quote.length) {
-        output.innerHTML += quote.charAt(index);
-        index++;
-        setTimeout(typeWriter, 40);
-      }
-    }
-    window.onload = typeWriter;
-  </script>
-</body>
-
-</html>
+      "We cling to w
