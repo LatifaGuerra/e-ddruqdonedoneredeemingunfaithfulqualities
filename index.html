@@ -60,6 +60,27 @@
       width: max-content;
       pointer-events: none;
     }
+
+    .audio-prompt {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(13, 17, 23, 0.9);
+      padding: 1em 2em;
+      border: 1px solid #6e7681;
+      border-radius: 6px;
+      color: #8b949e;
+      font-size: 0.9em;
+      text-align: center;
+      z-index: 9999;
+      pointer-events: none;
+      animation: fadeout 2s ease 3s forwards;
+    }
+
+    @keyframes fadeout {
+      to { opacity: 0; visibility: hidden; }
+    }
   </style>
 </head>
 
@@ -69,9 +90,9 @@
 
   <div class="footer">scan quietly. it's not for everyone.</div>
   <div class="title-tag">done, done redeeming unfaithful qualities</div>
+  <div class="audio-prompt" id="audioPrompt">click anywhere to unmute</div>
 
-  <!-- Ambient audio (autoplays muted) -->
-  <audio id="bg-audio" autoplay loop muted>
+  <audio id="bg-audio" autoplay loop muted playsinline>
     <source src="ambient.mp3" type="audio/mpeg" />
   </audio>
 
@@ -98,6 +119,7 @@
     const output = document.getElementById("quote");
     const cursor = document.querySelector(".cursor");
     const audio = document.getElementById("bg-audio");
+    const prompt = document.getElementById("audioPrompt");
 
     const seen = localStorage.getItem("ddruq_seen_quote");
 
@@ -108,7 +130,6 @@
     } else {
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       localStorage.setItem("ddruq_seen_quote", "true");
-
       let index = 0;
       function typeWriter() {
         if (index < quote.length) {
@@ -120,11 +141,10 @@
       typeWriter();
     }
 
-    // Unmute and play audio on first user click
     document.addEventListener("click", () => {
       if (audio.muted) {
         audio.muted = false;
-        audio.play().catch(() => {}); // silent fail if autoplay is blocked
+        audio.play().catch(() => {});
       }
     }, { once: true });
   </script>
