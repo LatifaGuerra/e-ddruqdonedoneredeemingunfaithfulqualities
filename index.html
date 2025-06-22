@@ -13,18 +13,21 @@
       line-height: 1.6;
       text-align: left;
     }
+
     .quote {
       font-size: 1.4em;
       white-space: pre-wrap;
       overflow-wrap: break-word;
     }
+
     .ascii {
-      font-size: 0.55em;
+      font-size: 0.48em;
       line-height: 1.1;
       white-space: pre-wrap;
       word-break: break-word;
       text-align: center;
     }
+
     .cursor {
       display: inline-block;
       background-color: #c9d1d9;
@@ -33,14 +36,17 @@
       vertical-align: bottom;
       animation: blink 1s step-end infinite;
     }
+
     @keyframes blink {
       50% { background-color: transparent; }
     }
+
     .footer {
       margin-top: 4em;
       font-size: 0.9em;
       color: #6e7681;
     }
+
     .title-tag {
       position: fixed;
       bottom: 1em;
@@ -55,6 +61,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="quote" id="quote"></div>
   <div class="cursor"></div>
@@ -62,9 +69,15 @@
   <div class="footer">scan quietly. it's not for everyone.</div>
   <div class="title-tag">done, done redeeming unfaithful qualities</div>
 
-  <audio autoplay loop>
+  <!-- Ambient audio -->
+  <audio autoplay loop playsinline muted>
     <source src="ambient.mp3" type="audio/mpeg" />
   </audio>
+
+  <!-- No JavaScript fallback -->
+  <noscript>
+    <p style="color: #8b949e;">This experience requires JavaScript.</p>
+  </noscript>
 
   <script>
     const quotes = [
@@ -80,15 +93,15 @@
       "don’t cum just yet."
     ];
 
-    const output = document.getElementById("quote");
-    const cursor = document.querySelector(".cursor");
-    const audio = document.querySelector("audio");
-
     const asciiArt = `
  _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/ /__/ ( / ( (  | 
 `;
+
+    const output = document.getElementById("quote");
+    const cursor = document.querySelector(".cursor");
+    const audio = document.querySelector("audio");
 
     const seen = localStorage.getItem("ddruq_seen_quote");
 
@@ -99,6 +112,7 @@
     } else {
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       localStorage.setItem("ddruq_seen_quote", "true");
+
       let index = 0;
       function typeWriter() {
         if (index < quote.length) {
