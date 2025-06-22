@@ -87,11 +87,20 @@
     .audio-prompt.fade {
       opacity: 0;
     }
+
+    .footer {
+      font-size: 0.9em;
+      color: #6e7681;
+      margin-top: 1em;
+    }
+
+    .red { color: red; }
   </style>
 </head>
 
 <body>
   <div class="quote" id="quote"></div>
+  <div class="footer" id="footer" style="display: none;">scan quietly. it's not for everyone.</div>
   <div class="ascii-wrapper" id="asciiWrapper" style="display: none;">
     <pre class="ascii" id="asciiArt"></pre>
   </div>
@@ -106,20 +115,20 @@
 
   <script>
     const quotes = [
-      "Your smile seasons the food.",
-      "We cling to what love remains in us \n— just to feel.",
-      "i feel you wanting more—\nto crawl into the hollowness beneath my ribs,\nto echo inside me\nlike I’m echoing inside you.",
-      "we talked\nuntil the sun appeared—\neach blink layered\nwith chuckles,\nknowing it’s finally here.",
-      "I compliment you\non the tattoo across your lips —\nyou scared your mom would see.",
-      "You make it easy to forget how rare this is.",
-      "Softly, locking your arms into my heart.",
-      "i kiss a line down your belly\nas your legs part like instinct.",
-      "ure ticklish on ur palm.",
-      "don’t cum just yet."
+      "<span class='red'>Your</span> smile seasons the food.",
+      "<span class='red'>We</span> cling to what love remains in us \n— just to feel.",
+      "<span class='red'>i</span> feel you wanting more—\nto crawl into the hollowness beneath my ribs,\nto echo inside me\nlike I’m echoing inside you.",
+      "<span class='red'>we</span> talked\nuntil the sun appeared—\neach blink layered\nwith chuckles,\nknowing it’s finally here.",
+      "<span class='red'>I</span> compliment you\non the tattoo across your lips —\nyou scared your mom would see.",
+      "<span class='red'>You</span> make it easy to forget how rare this is.",
+      "<span class='red'>Softly</span>, locking your arms into my heart.",
+      "<span class='red'>i</span> kiss a line down your belly\nas your legs part like instinct.",
+      "<span class='red'>ure</span> ticklish on ur palm.",
+      "<span class='red'>don’t</span> cum just yet."
     ];
 
     const asciiArtContent = `
-<span style="color:red;">L</span>    <span style="color:red;">A</span>
+<span class="red">L</span><span class="red">A</span> GUERRA
       _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/(___/ ( / ( (  | 
@@ -131,6 +140,7 @@
     const asciiEl = document.getElementById("asciiArt");
     const audio = document.getElementById("bg-audio");
     const prompt = document.getElementById("audioPrompt");
+    const footer = document.getElementById("footer");
 
     const seen = localStorage.getItem("ddruq_seen_quote");
 
@@ -138,7 +148,8 @@
       if (cursor) cursor.style.display = "none";
       if (output) output.style.display = "none";
       asciiWrapper.style.display = "flex";
-      asciiEl.textContent = asciiArtContent;
+      asciiEl.innerHTML = asciiArtContent;
+      footer.style.display = "block";
     } else {
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       localStorage.setItem("ddruq_seen_quote", "true");
@@ -149,6 +160,8 @@
           output.innerHTML += quote.charAt(index);
           index++;
           setTimeout(typeWriter, 40);
+        } else {
+          footer.style.display = "block";
         }
       }
       typeWriter();
@@ -159,7 +172,6 @@
         audio.muted = false;
         audio.play().catch(() => {});
       }
-
       if (prompt) {
         prompt.classList.add("fade");
         prompt.addEventListener("transitionend", () => prompt.remove());
