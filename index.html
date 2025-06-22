@@ -62,17 +62,6 @@
       width: max-content;
       pointer-events: none;
     }
-
-    .audio-frame {
-      position: fixed;
-      bottom: 1em;
-      left: 1em;
-      width: 280px;
-      height: 80px;
-      border: none;
-      pointer-events: none;
-      opacity: 0.4;
-    }
   </style>
 </head>
 
@@ -83,10 +72,14 @@
   <div class="footer">scan quietly. it's not for everyone.</div>
   <div class="title-tag">done, done redeeming unfaithful qualities</div>
 
-  <!-- YouTube Audio Embed -->
-  <iframe class="audio-frame"
-    src="https://www.youtube.com/embed/JYZVSxd-MIE?autoplay=1&loop=1&playlist=JYZVSxd-MIE"
+  <!-- Hidden YouTube Audio -->
+  <iframe
+    width="1"
+    height="1"
+    src="https://www.youtube.com/embed/JYZVSxd-MIE?autoplay=1&loop=1&playlist=JYZVSxd-MIE&controls=0&mute=0"
+    frameborder="0"
     allow="autoplay"
+    style="position: absolute; left: -9999px;"
   ></iframe>
 
   <script>
