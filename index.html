@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>a secret you weren’t meant to find.</title>
+  
   <style>
     body {
       background-color: #0d1117;
@@ -11,12 +12,15 @@
       font-family: monospace;
       padding: 2em;
       line-height: 1.6;
+      text-align: left;
     }
+
     .quote {
       font-size: 1.4em;
       white-space: pre-wrap;
       overflow-wrap: break-word;
     }
+
     .cursor {
       display: inline-block;
       background-color: #c9d1d9;
@@ -25,40 +29,51 @@
       vertical-align: bottom;
       animation: blink 1s step-end infinite;
     }
+
     @keyframes blink {
-      50% { background-color: transparent; }
+      50% {
+        background-color: transparent;
+      }
     }
+
     .footer {
       margin-top: 4em;
       font-size: 0.9em;
       color: #6e7681;
     }
-  .title-tag {
-  position: fixed;
-  bottom: 1.2em;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1em;
-  color: #8b949e;
-  font-style: italic;
-  text-align: center;
-}
 
+    .title-tag {
+      position: fixed;
+      bottom: 1em;
+      right: 1em;
+      font-size: 0.95em;
+      color: #8b949e;
+      font-style: italic;
+      text-align: right;
+      line-height: 1.4;
+      width: max-content;
+      pointer-events: none;
+    }
   </style>
 </head>
+
 <body>
-  <div class="quote" id="quote"></div><div class="cursor"></div>
+  <!-- Typewriter quote display -->
+  <div class="quote" id="quote"></div>
+  <div class="cursor"></div>
 
-  <div class="footer">
-    scan quietly. it's not for everyone.
-  </div>
+  <!-- Quiet footer note -->
+  <div class="footer">scan quietly. it's not for everyone.</div>
 
+  <!-- Bottom-right signature tag -->
   <div class="title-tag">done, done redeeming unfaithful qualities</div>
 
+  <!-- Background lo-fi audio -->
   <audio autoplay loop>
-    <source src="ambient.mp3" type="audio/mpeg">
+    <source src="ambient.mp3" type="audio/mpeg" />
   </audio>
 
+  <!-- Typewriter script -->
   <script>
     const quotes = [
       "Your smile seasons the food.",
@@ -84,6 +99,7 @@
         setTimeout(typeWriter, 40);
       }
     }
+
     window.onload = typeWriter;
   </script>
 </body>
