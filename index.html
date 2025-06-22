@@ -10,9 +10,13 @@
       color: #c9d1d9;
       font-family: monospace;
       padding: 2em;
+      margin: 0;
       line-height: 1.6;
       text-align: left;
       cursor: pointer;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .quote {
@@ -29,6 +33,14 @@
       text-align: center;
     }
 
+    .ascii-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
     .cursor {
       display: inline-block;
       background-color: #c9d1d9;
@@ -40,12 +52,6 @@
 
     @keyframes blink {
       50% { background-color: transparent; }
-    }
-
-    .footer {
-      margin-top: 4em;
-      font-size: 0.9em;
-      color: #6e7681;
     }
 
     .title-tag {
@@ -86,9 +92,11 @@
 
 <body>
   <div class="quote" id="quote"></div>
+  <div class="ascii-wrapper" id="asciiWrapper" style="display: none;">
+    <pre class="ascii" id="asciiArt"></pre>
+  </div>
   <div class="cursor"></div>
 
-  <div class="footer">scan quietly. it's not for everyone.</div>
   <div class="title-tag">done, done redeeming unfaithful qualities</div>
   <div class="audio-prompt" id="audioPrompt">click anywhere to unmute</div>
 
@@ -110,7 +118,7 @@
       "don’t cum just yet."
     ];
 
-    const asciiArt = `
+    const asciiArtContent = `
       _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/(___/ ( / ( (  | 
@@ -118,6 +126,8 @@
 
     const output = document.getElementById("quote");
     const cursor = document.querySelector(".cursor");
+    const asciiWrapper = document.getElementById("asciiWrapper");
+    const asciiEl = document.getElementById("asciiArt");
     const audio = document.getElementById("bg-audio");
     const prompt = document.getElementById("audioPrompt");
 
@@ -125,11 +135,13 @@
 
     if (seen) {
       if (cursor) cursor.style.display = "none";
-      if (audio) audio.remove();
-      output.innerHTML = `<pre class="ascii">${asciiArt}</pre>`;
+      if (output) output.style.display = "none";
+      asciiWrapper.style.display = "flex";
+      asciiEl.textContent = asciiArtContent;
     } else {
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       localStorage.setItem("ddruq_seen_quote", "true");
+
       let index = 0;
       function typeWriter() {
         if (index < quote.length) {
