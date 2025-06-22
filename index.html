@@ -81,6 +81,11 @@
       text-align: center;
       z-index: 9999;
       pointer-events: none;
+      transition: opacity 1s ease;
+    }
+
+    .audio-prompt.fade {
+      opacity: 0;
     }
   </style>
 </head>
@@ -114,6 +119,7 @@
     ];
 
     const asciiArtContent = `
+<span style="color:red;">L</span>    <span style="color:red;">A</span>
       _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/(___/ ( / ( (  | 
@@ -154,7 +160,10 @@
         audio.play().catch(() => {});
       }
 
-      if (prompt) prompt.remove();
+      if (prompt) {
+        prompt.classList.add("fade");
+        prompt.addEventListener("transitionend", () => prompt.remove());
+      }
     }, { once: true });
   </script>
 </body>
