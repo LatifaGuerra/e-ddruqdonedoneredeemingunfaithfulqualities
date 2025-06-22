@@ -72,59 +72,46 @@
   <div class="footer">scan quietly. it's not for everyone.</div>
   <div class="title-tag">done, done redeeming unfaithful qualities</div>
 
- <audio autoplay loop muted>
-  <source src="ambient.mp3" type="audio/mpeg" />
-</audio>
-
+  <!-- Ambient audio -->
+  <audio autoplay loop playsinline>
+    <source src="ambient.mp3" type="audio/mpeg" />
+  </audio>
 
   <script>
-  const quotes = [
-    "Your smile seasons the food.",
-    "We cling to what love remains in us \n— just to feel.",
-    "i feel you wanting more—\nto crawl into the hollowness beneath my ribs,\nto echo inside me\nlike I’m echoing inside you.",
-    "we talked\nuntil the sun appeared—\neach blink layered\nwith chuckles,\nknowing it’s finally here.",
-    "I compliment you\non the tattoo across your lips —\nyou scared your mom would see.",
-    "You make it easy to forget how rare this is.",
-    "Softly, locking your arms into my heart.",
-    "i kiss a line down your belly\nas your legs part like instinct.",
-    "ure ticklish on ur palm.",
-    "don’t cum just yet."
-  ];
+    const quotes = [
+      "Your smile seasons the food.",
+      "We cling to what love remains in us \n— just to feel.",
+      "i feel you wanting more—\nto crawl into the hollowness beneath my ribs,\nto echo inside me\nlike I’m echoing inside you.",
+      "we talked\nuntil the sun appeared—\neach blink layered\nwith chuckles,\nknowing it’s finally here.",
+      "I compliment you\non the tattoo across your lips —\nyou scared your mom would see.",
+      "You make it easy to forget how rare this is.",
+      "Softly, locking your arms into my heart.",
+      "i kiss a line down your belly\nas your legs part like instinct.",
+      "ure ticklish on ur palm.",
+      "don’t cum just yet."
+    ];
 
-  const output = document.getElementById("quote");
-  const cursor = document.querySelector(".cursor");
-  const audio = document.querySelector("audio");
-
-  const asciiArt = `
+    const asciiArt = `
  _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/ /__/ ( / ( (  | 
 `;
 
-  const seen = localStorage.getItem("ddruq_seen_quote");
+    const output = document.getElementById("quote");
+    const cursor = document.querySelector(".cursor");
+    const audio = document.querySelector("audio");
 
-  if (seen) {
-    if (cursor) cursor.style.display = "none";
-    if (audio) audio.remove();
-    output.innerHTML = `<pre class="ascii">${asciiArt}</pre>`;
-  } else {
-    const quote = quotes[Math.floor(Math.random() * quotes.length)];
-    localStorage.setItem("ddruq_seen_quote", "true");
-    let index = 0;
+    const seen = localStorage.getItem("ddruq_seen_quote");
 
-    function typeWriter() {
-      if (index < quote.length) {
-        output.innerHTML += quote.charAt(index);
-        index++;
-        setTimeout(typeWriter, 40);
-      }
-    }
+    if (seen) {
+      if (cursor) cursor.style.display = "none";
+      if (audio) audio.remove();
+      output.innerHTML = `<pre class="ascii">${asciiArt}</pre>`;
+    } else {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      localStorage.setItem("ddruq_seen_quote", "true");
 
-    typeWriter();
-  }
-</script>
-
-</body>
-</html>
-
-
+      let index = 0;
+      function typeWriter() {
+        if (index < quote.length) {
+          output.innerHTM
