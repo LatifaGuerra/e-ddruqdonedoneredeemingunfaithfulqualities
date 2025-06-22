@@ -68,26 +68,19 @@
     }
 
     .audio-prompt {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(13, 17, 23, 0.85);
-  padding: 0.4em 1em;
-  border: 1px solid #444c56;
-  border-radius: 4px;
-  color: #8b949e;
-  font-size: 0.75em;
-  text-align: center;
-  z-index: 9999;
-  pointer-events: none;
-  animation: fadeout 2s ease 3s forwards;
-}
-
-    }
-
-    @keyframes fadeout {
-      to { opacity: 0; visibility: hidden; }
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(13, 17, 23, 0.85);
+      padding: 0.4em 1em;
+      border: 1px solid #444c56;
+      border-radius: 4px;
+      color: #8b949e;
+      font-size: 0.75em;
+      text-align: center;
+      z-index: 9999;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -160,6 +153,8 @@
         audio.muted = false;
         audio.play().catch(() => {});
       }
+
+      if (prompt) prompt.remove();
     }, { once: true });
   </script>
 </body>
