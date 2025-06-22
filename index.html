@@ -38,7 +38,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      text-align: center;
     }
 
     .cursor {
@@ -52,6 +51,12 @@
 
     @keyframes blink {
       50% { background-color: transparent; }
+    }
+
+    .footer {
+      margin-top: 4em;
+      font-size: 0.9em;
+      color: #6e7681;
     }
 
     .title-tag {
@@ -97,6 +102,7 @@
   </div>
   <div class="cursor"></div>
 
+  <div class="footer" id="footer">scan quietly. it's not for everyone.</div>
   <div class="title-tag">done, done redeeming unfaithful qualities</div>
   <div class="audio-prompt" id="audioPrompt">click anywhere to unmute</div>
 
@@ -118,7 +124,7 @@
       "don’t cum just yet."
     ];
 
-    const asciiArtContent = `
+    const asciiArt = `
       _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/(___/ ( / ( (  | 
@@ -130,6 +136,7 @@
     const asciiEl = document.getElementById("asciiArt");
     const audio = document.getElementById("bg-audio");
     const prompt = document.getElementById("audioPrompt");
+    const footer = document.getElementById("footer");
 
     const seen = localStorage.getItem("ddruq_seen_quote");
 
@@ -137,11 +144,11 @@
       if (cursor) cursor.style.display = "none";
       if (output) output.style.display = "none";
       asciiWrapper.style.display = "flex";
-      asciiEl.textContent = asciiArtContent;
+      asciiEl.textContent = asciiArt;
+      if (footer) footer.remove(); // remove footer only after refresh
     } else {
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       localStorage.setItem("ddruq_seen_quote", "true");
-
       let index = 0;
       function typeWriter() {
         if (index < quote.length) {
