@@ -23,11 +23,11 @@
       font-size: 1.4em;
       white-space: pre-wrap;
       overflow-wrap: break-word;
-      display: inline-block; /* allows background to hug text */
+      display: inline-block; /* hug text background */
     }
 
     .selected {
-      background-color: #3390ff; /* typical selection blue */
+      background-color: #3390ff; /* blue selection */
       color: white;
     }
 
@@ -130,13 +130,14 @@
       "i wanted you to speak it aloud,\nto let the veil fall,\nto confess that yesterday was more real\nthan the masks we wear today. \nso why pretend the sun has not risen? \neven shadows admit their devotion to light."
     ];
 
+
     const asciiArt = `
       _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/(___/ ( / ( (  | 
 `;
 
-  const output = document.getElementById("quote");
+ const output = document.getElementById("quote");
     const cursor = document.querySelector(".cursor");
     const asciiWrapper = document.getElementById("asciiWrapper");
     const asciiEl = document.getElementById("asciiArt");
@@ -152,16 +153,19 @@
       asciiEl.textContent = asciiArt;
       if (footer) footer.remove();
     } else {
-      function randomTeaser() {
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        const len = 6 + Math.floor(Math.random() * 19);
-        const start = Math.floor(Math.random() * Math.max(1, randomQuote.length - len));
-        return randomQuote.substr(start, len);
-      }
 
-      let useTeaser = Math.random() < 0.5; // 50% chance
-      let teaserText = useTeaser ? randomTeaser() : "";
-      let fullQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      // 50% chance of teaser
+      let useTeaser = Math.random() < 0.5;
+
+      // Pick teaser from beginning of a random quote
+      let teaserText = useTeaser ? quotes[Math.floor(Math.random() * quotes.length)].substr(0, 6 + Math.floor(Math.random() * 3)) : "";
+
+      // Pick full quote different from teaser
+      let fullQuote;
+      do {
+        fullQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      } while (teaserText && fullQuote.startsWith(teaserText));
+
       let charIndex = 0;
       let deleting = false;
       let stage = useTeaser ? "teaser" : "full";
