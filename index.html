@@ -94,7 +94,6 @@
     }
   </style>
 </head>
-
 <body>
   <div class="quote" id="quote"></div>
   <div class="ascii-wrapper" id="asciiWrapper" style="display: none;">
@@ -149,17 +148,6 @@ const output = document.getElementById("quote");
       asciiEl.textContent = asciiArt;
       if (footer) footer.remove();
     } else {
-      function shuffle(array) {
-        return array.sort(() => Math.random() - 0.5);
-      }
-
-      let queue = shuffle(quotes);
-      let currentQuote = 0;
-      let charIndex = 0;
-      let deleting = false;
-      let stage = "teaser"; // teaser or full
-      let useTeaser = Math.random() < 0.5; // 50% chance for teaser
-
       function randomTeaser() {
         const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
         const len = 6 + Math.floor(Math.random() * 19);
@@ -167,12 +155,15 @@ const output = document.getElementById("quote");
         return randomQuote.substr(start, len);
       }
 
-      let teaserText = randomTeaser();
+      let useTeaser = Math.random() < 0.5; // 50% chance for teaser
+      let teaserText = useTeaser ? randomTeaser() : "";
+      let fullQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      let charIndex = 0;
+      let deleting = false;
+      let stage = useTeaser ? "teaser" : "full";
 
       function typeQuote() {
-        const quote = queue[currentQuote];
-
-        if (stage === "teaser" && useTeaser) {
+        if (stage === "teaser") {
           if (!deleting) {
             output.textContent += teaserText.charAt(charIndex);
             charIndex++;
@@ -191,21 +182,17 @@ const output = document.getElementById("quote");
           }
           setTimeout(typeQuote, deleting ? 40 : 120);
 
-        } else { // skip teaser or typing full quote
-          stage = "full";
-          if (charIndex < quote.length) {
-            output.textContent += quote.charAt(charIndex);
+        } else if (stage === "full") {
+          if (charIndex < fullQuote.length) {
+            output.textContent += fullQuote.charAt(charIndex);
             charIndex++;
-            setTimeout(typeQuote, 120);
+            setTimeout(typeQuote, 100);
           } else {
+            // Full quote typed, wait 3 seconds, then clear everything
             setTimeout(() => {
-              currentQuote = (currentQuote + 1) % queue.length;
-              teaserText = randomTeaser();
-              useTeaser = Math.random() < 0.5; // new chance for next quote
-              charIndex = 0;
-              stage = "teaser";
-              typeQuote();
-            }, 1500);
+              output.textContent = "";
+              cursor.style.display = "none";
+            }, 3000);
           }
         }
       }
