@@ -119,33 +119,53 @@ if(localStorage.getItem("ddruq_seen_quote")) {
   let charIndex = 0, deleting=false, stage=useTeaser?"teaser":"full";
 
   function typeQuote() {
-    if(stage==="teaser") {
-      if(!deleting) {
-        output.textContent += teaserText.charAt(charIndex);
-        charIndex++;
-        if(charIndex===teaserText.length){ deleting=true; setTimeout(typeQuote,800); return; }
-      } else {
-        output.textContent = output.textContent.slice(0,-1);
-        if(output.textContent.length===0){ deleting=false; charIndex=0; stage="full"; }
+  if(stage === "teaser") {
+    if(!deleting) {
+      output.textContent += teaserText.charAt(charIndex);
+      charIndex++;
+      if(charIndex === teaserText.length) {
+        deleting = true;
+        setTimeout(typeQuote, 800);
+        return;
       }
-      setTimeout(typeQuote,deleting?40:120);
-    } else if(stage==="full") {
-      if(charIndex<fullQuote.length){ output.textContent+=fullQuote.charAt(charIndex); charIndex++; setTimeout(typeQuote,100); }
-      else {
-        setTimeout(()=>{
-          output.innerHTML = `<span class="selected">${fullQuote}</span>`;
-          setTimeout(()=>{
-            output.textContent="";
-            cursor.style.display="none";
-            asciiWrapper.style.display="flex";
-            if(footer) footer.remove();
-            revealASCII(asciiArt, asciiEl, 25);
-            localStorage.setItem("ddruq_seen_quote","true");
-          },800);
-        },3000);
+    } else {
+      output.textContent = output.textContent.slice(0,-1);
+      if(output.textContent.length === 0){
+        deleting = false;
+        charIndex = 0;
+        stage = "full";
       }
     }
+    setTimeout(typeQuote, deleting ? 40 : 120 + Math.random()*30);
+  } else if(stage === "full") {
+    if(charIndex < fullQuote.length) {
+      output.textContent += fullQuote.charAt(charIndex);
+      charIndex++;
+
+      // Check if the character is punctuation for a subtle pause
+      const char = fullQuote.charAt(charIndex-1);
+      let delay = 90 + Math.random()*40; // base random typing delay
+      if(char === "," || char === "—") delay += 150 + Math.random()*50; // slightly longer pause
+      if(char === "." || char === "\n") delay += 250 + Math.random()*100; // even longer pause for sentences/line breaks
+
+      setTimeout(typeQuote, delay);
+    } else {
+      // Full quote typed, wait 1.5s, Ctrl+A effect
+      setTimeout(()=>{
+        output.innerHTML = `<span class="selected">${fullQuote}</span>`;
+        setTimeout(()=>{
+          output.textContent = "";
+          cursor.style.display = "none";
+          asciiWrapper.style.display = "flex";
+          asciiEl.textContent = asciiArt;
+          if(footer) footer.remove();
+          localStorage.setItem("ddruq_seen_quote","true");
+        },800);
+      },1500);
+    }
   }
+}
+
   typeQuote();
 }
 
