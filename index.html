@@ -1,121 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>a secret you weren’t meant to find.</title>
-  <style>
-    body {
-      background-color: #0d1117;
-      color: #c9d1d9;
-      font-family: monospace;
-      padding: 2em;
-      margin: 0;
-      line-height: 1.6;
-      text-align: left;
-      cursor: pointer;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>a secret you weren’t meant to find.</title>
+<style>
+  body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: monospace;
+    padding: 2em;
+    margin: 0;
+    line-height: 1.6;
+    text-align: left;
+    cursor: pointer;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-    .quote {
-      font-size: 1.4em;
-      white-space: pre-wrap;
-      overflow-wrap: break-word;
-      display: inline; /* hug text for selection */
-    }
+  .quote {
+    font-size: 1.4em;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    display: inline; /* hug text for selection */
+  }
 
-    .selected {
-      background-color: #3390ff; /* blue highlight */
-      color: white;
-    }
+  .selected {
+    display: inline-block;        /* hug text */
+    background-color: #3390ff;    /* blue highlight */
+    color: white;
+    padding: 0 2px;               /* slight padding */
+    line-height: 1.4;
+    border-radius: 2px;
+  }
 
-    .ascii {
-      font-size: 0.48em;
-      line-height: 1.1;
-      white-space: pre-wrap;
-      word-break: break-word;
-      text-align: center;
-    }
+  .ascii {
+    font-size: 0.48em;
+    line-height: 1.1;
+    white-space: pre-wrap;
+    word-break: break-word;
+    text-align: center;
+  }
 
-    .ascii-wrapper {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  .ascii-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .cursor {
-      display: inline-block;
-      background-color: #c9d1d9;
-      width: 8px;
-      height: 1em;
-      vertical-align: bottom;
-      animation: blink 1s step-end infinite;
-    }
+  .cursor {
+    display: inline-block;
+    background-color: #c9d1d9;
+    width: 8px;
+    height: 1em;
+    vertical-align: bottom;
+    animation: blink 1s step-end infinite;
+  }
 
-    @keyframes blink {
-      50% { background-color: transparent; }
-    }
+  @keyframes blink {
+    50% { background-color: transparent; }
+  }
 
-    .footer {
-      margin-top: 4em;
-      font-size: 0.9em;
-      color: #6e7681;
-    }
+  .footer {
+    margin-top: 4em;
+    font-size: 0.9em;
+    color: #6e7681;
+  }
 
-    .title-tag {
-      position: fixed;
-      bottom: 1em;
-      right: 1em;
-      font-size: 0.95em;
-      color: #8b949e;
-      font-style: italic;
-      text-align: right;
-      line-height: 1.4;
-      width: max-content;
-      pointer-events: none;
-    }
+  .title-tag {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    font-size: 0.95em;
+    color: #8b949e;
+    font-style: italic;
+    text-align: right;
+    line-height: 1.4;
+    width: max-content;
+    pointer-events: none;
+  }
 
-    .audio-prompt {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(13, 17, 23, 0.9);
-      padding: 0.5em 1em;
-      border: 1px solid #6e7681;
-      border-radius: 6px;
-      color: #8b949e;
-      font-size: 0.75em;
-      text-align: center;
-      z-index: 9999;
-      pointer-events: none;
-      animation: fadeout 1s ease 2s forwards;
-    }
+  .audio-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(13, 17, 23, 0.9);
+    padding: 0.5em 1em;
+    border: 1px solid #6e7681;
+    border-radius: 6px;
+    color: #8b949e;
+    font-size: 0.75em;
+    text-align: center;
+    z-index: 9999;
+    pointer-events: none;
+    animation: fadeout 1s ease 2s forwards;
+  }
 
-    @keyframes fadeout {
-      to { opacity: 0; visibility: hidden; }
-    }
-  </style>
+  @keyframes fadeout {
+    to { opacity: 0; visibility: hidden; }
+  }
+</style>
 </head>
 <body>
-  <div class="quote" id="quote"></div>
-  <div class="ascii-wrapper" id="asciiWrapper" style="display: none;">
-    <pre class="ascii" id="asciiArt"></pre>
-  </div>
-  <div class="cursor"></div>
+<div class="quote" id="quote"></div>
+<div class="ascii-wrapper" id="asciiWrapper" style="display: none;">
+  <pre class="ascii" id="asciiArt"></pre>
+</div>
+<div class="cursor"></div>
+<div class="footer" id="footer">scan quietly. it's not for everyone.</div>
+<div class="title-tag">done, done redeeming unfaithful qualities</div>
+<div class="audio-prompt" id="audioPrompt">click anywhere to unmute</div>
 
-  <div class="footer" id="footer">scan quietly. it's not for everyone.</div>
-  <div class="title-tag">done, done redeeming unfaithful qualities</div>
-  <div class="audio-prompt" id="audioPrompt">click anywhere to unmute</div>
+<audio id="bg-audio" autoplay loop muted playsinline>
+  <source src="ambient.mp3" type="audio/mpeg" />
+</audio>
 
-  <audio id="bg-audio" autoplay loop muted playsinline>
-    <source src="ambient.mp3" type="audio/mpeg" />
-  </audio>
-
-  <script>
+<script>
 const quotes = [
   "you parted your lips like it was sacred.\neven in silence, my kisses never let you second guess.\ni moved like someone who knew the way.\nand still, you told me: slower so it stain.",
   
@@ -139,7 +142,6 @@ const quotes = [
   
   "i wanted you to speak it aloud,\nto let the veil fall,\nto confess that yesterday was more real\nthan the masks we wear today. \nso why pretend the sun has not risen? \neven shadows admit their devotion to light."
 ];
-
     const asciiArt = `
       _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
@@ -150,78 +152,81 @@ const output = document.getElementById("quote");
 const cursor = document.querySelector(".cursor");
 const asciiWrapper = document.getElementById("asciiWrapper");
 const asciiEl = document.getElementById("asciiArt");
-const audio = document.getElementById("bg-audio");
 const footer = document.getElementById("footer");
 
-// Function to pick a random quote different from given text
 function pickRandomQuote(exclude="") {
   let q;
-  do {
-    q = quotes[Math.floor(Math.random() * quotes.length)];
-  } while (exclude && q === exclude);
+  do { q = quotes[Math.floor(Math.random()*quotes.length)]; }
+  while(exclude && q === exclude);
   return q;
 }
 
-// Always start typing
-let useTeaser = Math.random() < 0.5;
-let teaserText = useTeaser ? pickRandomQuote().substr(0, 6 + Math.floor(Math.random() * 3)) : "";
-let fullQuote = pickRandomQuote(teaserText);
+// Check localStorage: normal browser shows ASCII on refresh
+if(localStorage.getItem("ddruq_seen_quote")) {
+  asciiWrapper.style.display = "flex";
+  asciiEl.textContent = asciiArt;
+  if(footer) footer.remove();
+} else {
+  // 50% chance of teaser
+  let useTeaser = Math.random() < 0.5;
+  let teaserText = useTeaser ? pickRandomQuote().substr(0, 6 + Math.floor(Math.random() * 3)) : "";
+  let fullQuote = pickRandomQuote(teaserText);
 
-let charIndex = 0;
-let deleting = false;
-let stage = useTeaser ? "teaser" : "full";
+  let charIndex = 0;
+  let deleting = false;
+  let stage = useTeaser ? "teaser" : "full";
 
-function randomPause(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function typeQuote() {
-  if (stage === "teaser") {
-    if (!deleting) {
-      output.textContent += teaserText.charAt(charIndex);
-      charIndex++;
-      if (charIndex === teaserText.length) {
-        deleting = true;
-        setTimeout(typeQuote, 800);
-        return;
+  function typeQuote() {
+    if(stage === "teaser") {
+      if(!deleting) {
+        output.textContent += teaserText.charAt(charIndex);
+        charIndex++;
+        if(charIndex === teaserText.length) {
+          deleting = true;
+          setTimeout(typeQuote, 800);
+          return;
+        }
+      } else {
+        output.textContent = output.textContent.slice(0,-1);
+        if(output.textContent.length === 0){
+          deleting = false;
+          charIndex = 0;
+          stage = "full";
+        }
       }
-    } else {
-      output.textContent = output.textContent.slice(0, -1);
-      if (output.textContent.length === 0) {
-        deleting = false;
-        charIndex = 0;
-        stage = "full";
+      setTimeout(typeQuote, deleting ? 40 : 120);
+    } else if(stage === "full") {
+      if(charIndex < fullQuote.length) {
+        output.textContent += fullQuote.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeQuote, 100);
+      } else {
+        // Full quote typed, wait 3s, Ctrl+A effect
+        setTimeout(()=>{
+          output.innerHTML = `<span class="selected">${fullQuote}</span>`;
+          setTimeout(()=>{
+            output.textContent = "";
+            cursor.style.display = "none";
+            asciiWrapper.style.display = "flex";
+            asciiEl.textContent = asciiArt;
+            if(footer) footer.remove();
+            localStorage.setItem("ddruq_seen_quote","true");
+          },800);
+        },3000);
       }
-    }
-    setTimeout(typeQuote, deleting ? 40 : 120);
-  } else if (stage === "full") {
-    if (charIndex < fullQuote.length) {
-      output.textContent += fullQuote.charAt(charIndex);
-      charIndex++;
-      setTimeout(typeQuote, 100);
-    } else {
-      // Full quote typed, wait 3s, show Ctrl+A effect hugging text
-      setTimeout(() => {
-        output.innerHTML = `<span class="selected">${fullQuote}</span>`;
-        setTimeout(() => {
-          output.textContent = "";
-          cursor.style.display = "none";
-          asciiWrapper.style.display = "flex";
-          asciiEl.textContent = asciiArt;
-          if (footer) footer.remove();
-          localStorage.setItem("ddruq_seen_quote", "true");
-        }, 800);
-      }, 3000);
     }
   }
+
+  typeQuote();
 }
 
-typeQuote();
-
+// Audio unmute on click
 document.addEventListener("click", () => {
-  if (audio.muted) {
+  if(audio.muted){
     audio.muted = false;
-    audio.play().catch(() => {});
+    audio.play().catch(()=>{});
   }
-}, { once: true });
+},{once:true});
 </script>
+</body>
+</html>
