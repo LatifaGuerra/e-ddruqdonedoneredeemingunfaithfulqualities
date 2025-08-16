@@ -133,7 +133,7 @@
 (__(  | (__)(__/(___/ ( / ( (  | 
 `;
 
-  const output = document.getElementById("quote");
+const output = document.getElementById("quote");
     const cursor = document.querySelector(".cursor");
     const asciiWrapper = document.getElementById("asciiWrapper");
     const asciiEl = document.getElementById("asciiArt");
@@ -149,27 +149,32 @@
       asciiEl.textContent = asciiArt;
       if (footer) footer.remove();
     } else {
-      // Shuffle quotes
       function shuffle(array) {
         return array.sort(() => Math.random() - 0.5);
       }
       let queue = shuffle(quotes);
-
       let currentQuote = 0;
       let charIndex = 0;
       let deleting = false;
       let stage = "teaser"; // teaser or full
 
+      function randomTeaser() {
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        const len = 6 + Math.floor(Math.random() * 19);
+        const start = Math.floor(Math.random() * Math.max(1, randomQuote.length - len));
+        return randomQuote.substr(start, len);
+      }
+
+      let teaserText = randomTeaser();
+
       function typeQuote() {
         const quote = queue[currentQuote];
 
         if (stage === "teaser") {
-          const teaserLength = Math.min(6 + Math.floor(Math.random() * 19), quote.length);
-
           if (!deleting) {
-            output.textContent += quote.charAt(charIndex);
+            output.textContent += teaserText.charAt(charIndex);
             charIndex++;
-            if (charIndex === teaserLength) {
+            if (charIndex === teaserText.length) {
               deleting = true;
               setTimeout(typeQuote, 800);
               return;
@@ -190,9 +195,9 @@
             charIndex++;
             setTimeout(typeQuote, 120);
           } else {
-            // Wait before next quote
             setTimeout(() => {
               currentQuote = (currentQuote + 1) % queue.length;
+              teaserText = randomTeaser();
               charIndex = 0;
               stage = "teaser";
               typeQuote();
