@@ -23,6 +23,12 @@
       font-size: 1.4em;
       white-space: pre-wrap;
       overflow-wrap: break-word;
+      transition: background 0.2s ease;
+    }
+
+    .selected {
+      background-color: #3390ff; /* typical selection blue */
+      color: white;
     }
 
     .ascii {
@@ -125,14 +131,13 @@
     ];
 
 
-
     const asciiArt = `
       _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/(___/ ( / ( (  | 
 `;
 
-const output = document.getElementById("quote");
+ const output = document.getElementById("quote");
     const cursor = document.querySelector(".cursor");
     const asciiWrapper = document.getElementById("asciiWrapper");
     const asciiEl = document.getElementById("asciiArt");
@@ -155,7 +160,7 @@ const output = document.getElementById("quote");
         return randomQuote.substr(start, len);
       }
 
-      let useTeaser = Math.random() < 0.5; // 50% chance for teaser
+      let useTeaser = Math.random() < 0.5; // 50% chance
       let teaserText = useTeaser ? randomTeaser() : "";
       let fullQuote = quotes[Math.floor(Math.random() * quotes.length)];
       let charIndex = 0;
@@ -188,10 +193,14 @@ const output = document.getElementById("quote");
             charIndex++;
             setTimeout(typeQuote, 100);
           } else {
-            // Full quote typed, wait 3 seconds, then clear everything
+            // Full quote typed, wait 3s, then Ctrl+A effect
             setTimeout(() => {
-              output.textContent = "";
-              cursor.style.display = "none";
+              output.classList.add("selected"); // add blue highlight
+              setTimeout(() => {
+                output.textContent = ""; // clear text
+                output.classList.remove("selected");
+                cursor.style.display = "none";
+              }, 800); // short delay to show selection
             }, 3000);
           }
         }
