@@ -116,20 +116,19 @@
   </audio>
 
   <script>
-    const quotes = [
-      "you parted your lips like it was sacred.\neven in silence, my kisses never let you second guess.\ni moved like someone who knew the way.\nand still, you told me: slower so it stain.",
-      "i undressed like a confession.\nyou stayed like absolution.\nthere was no shame between us,\njust skin learning how to say: let me be yours.",
-      "i feel you wanting more—\nto crawl into the hollowness beneath my ribs,\nto echo inside me\nlike I’m echoing inside you.",
-      "we talked\nuntil the sun appeared—\neach blink layered\nwith chuckles,\nknowing it’s finally here.",
-      "i want to tell you something—\nwith my tongue,\nwith my hands,\nwith the way our bodies slow-dance.",
-      "i kiss a line down your belly\nas your legs part on instinct.\nyour breath stutters—\nyou beg me to take all of it,\nand i do, as you plead.",
-      "don’t cum just yet.\ni want to stay in this ache with you.\nin this pause between need and surrender.\nthis is the closest i’ve felt to safety.",
-      "your smile seasons the food.\nyour hands wash every dish\nlike they’re cleansing something \nsacred than this meal.",
-      "i didn’t need to ask.\nyou just curled into me like you always belonged.\nmy hand on your lower back.\nyour breath undoing every apology i rehearsed.",
-      "i compliment you\non the tattoo across your lips —\nafraid your mom would see.\nlet my breath become a breeze —\nhugging your smile forever.",
-      "i wanted you to speak it aloud,\nto let the veil fall,\nto confess that yesterday was more real\nthan the masks we wear today. \nso why pretend the sun has not risen? \neven shadows admit their devotion to light."
-    ];
-
+const quotes = [
+  "you parted your lips like it was sacred.\neven in silence, my kisses never let you second guess.\ni moved like someone who knew the way.\nand still, you told me: slower so it stain.",
+  "i undressed like a confession.\nyou stayed like absolution.\nthere was no shame between us,\njust skin learning how to say: let me be yours.",
+  "i feel you wanting more—\nto crawl into the hollowness beneath my ribs,\nto echo inside me\nlike I’m echoing inside you.",
+  "we talked\nuntil the sun appeared—\neach blink layered\nwith chuckles,\nknowing it’s finally here.",
+  "i want to tell you something—\nwith my tongue,\nwith my hands,\nwith the way our bodies slow-dance.",
+  "i kiss a line down your belly\nas your legs part on instinct.\nyour breath stutters—\nyou beg me to take all of it,\nand i do, as you plead.",
+  "don’t cum just yet.\ni want to stay in this ache with you.\nin this pause between need and surrender.\nthis is the closest i’ve felt to safety.",
+  "your smile seasons the food.\nyour hands wash every dish\nlike they’re cleansing something \nsacred than this meal.",
+  "i didn’t need to ask.\nyou just curled into me like you always belonged.\nmy hand on your lower back.\nyour breath undoing every apology i rehearsed.",
+  "i compliment you\non the tattoo across your lips —\nafraid your mom would see.\nlet my breath become a breeze —\nhugging your smile forever.",
+  "i wanted you to speak it aloud,\nto let the veil fall,\nto confess that yesterday was more real\nthan the masks we wear today. \nso why pretend the sun has not risen? \neven shadows admit their devotion to light."
+];
 
     const asciiArt = `
       _    __      ___ __  __  _  
@@ -138,90 +137,81 @@
 `;
 
 const output = document.getElementById("quote");
-    const cursor = document.querySelector(".cursor");
-    const asciiWrapper = document.getElementById("asciiWrapper");
-    const asciiEl = document.getElementById("asciiArt");
-    const audio = document.getElementById("bg-audio");
-    const footer = document.getElementById("footer");
+const cursor = document.querySelector(".cursor");
+const asciiWrapper = document.getElementById("asciiWrapper");
+const asciiEl = document.getElementById("asciiArt");
+const audio = document.getElementById("bg-audio");
+const footer = document.getElementById("footer");
 
-    const seen = localStorage.getItem("ddruq_seen_quote");
+// Function to pick a random quote different from given text
+function pickRandomQuote(exclude="") {
+  let q;
+  do {
+    q = quotes[Math.floor(Math.random() * quotes.length)];
+  } while (exclude && q === exclude);
+  return q;
+}
 
-    if (seen) {
-      if (cursor) cursor.style.display = "none";
-      if (output) output.style.display = "none";
-      asciiWrapper.style.display = "flex";
-      asciiEl.textContent = asciiArt;
-      if (footer) footer.remove();
+// Always start typing
+let useTeaser = Math.random() < 0.5;
+let teaserText = useTeaser ? pickRandomQuote().substr(0, 6 + Math.floor(Math.random() * 3)) : "";
+let fullQuote = pickRandomQuote(teaserText);
+
+let charIndex = 0;
+let deleting = false;
+let stage = useTeaser ? "teaser" : "full";
+
+function randomPause(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function typeQuote() {
+  if (stage === "teaser") {
+    if (!deleting) {
+      output.textContent += teaserText.charAt(charIndex);
+      charIndex++;
+      if (charIndex === teaserText.length) {
+        deleting = true;
+        setTimeout(typeQuote, 800);
+        return;
+      }
     } else {
-      // 50% chance for teaser
-      let useTeaser = Math.random() < 0.5;
-
-      let teaserText = "";
-      let fullQuote;
-
-      if (useTeaser) {
-        const teaserQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        teaserText = teaserQuote.substr(0, 6 + Math.floor(Math.random() * 3));
-        do {
-          fullQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        } while (fullQuote === teaserQuote);
-      } else {
-        fullQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      output.textContent = output.textContent.slice(0, -1);
+      if (output.textContent.length === 0) {
+        deleting = false;
+        charIndex = 0;
+        stage = "full";
       }
-
-      let charIndex = 0;
-      let deleting = false;
-      let stage = useTeaser ? "teaser" : "full";
-
-      function typeQuote() {
-        if (stage === "teaser") {
-          if (!deleting) {
-            output.textContent += teaserText.charAt(charIndex);
-            charIndex++;
-            if (charIndex === teaserText.length) {
-              deleting = true;
-              setTimeout(typeQuote, 800);
-              return;
-            }
-          } else {
-            output.textContent = output.textContent.slice(0, -1);
-            if (output.textContent.length === 0) {
-              deleting = false;
-              charIndex = 0;
-              stage = "full";
-            }
-          }
-          setTimeout(typeQuote, deleting ? 40 : 120);
-
-        } else if (stage === "full") {
-          if (charIndex < fullQuote.length) {
-            output.textContent += fullQuote.charAt(charIndex);
-            charIndex++;
-            setTimeout(typeQuote, 100);
-          } else {
-            // Full quote typed, wait 3s, then Ctrl+A highlight
-            setTimeout(() => {
-              output.innerHTML = `<span class="selected">${fullQuote}</span>`;
-              setTimeout(() => {
-                output.textContent = "";
-                cursor.style.display = "none";
-                // mark seen after full animation
-                localStorage.setItem("ddruq_seen_quote", "true");
-              }, 800); // show highlight briefly
-            }, 3000);
-          }
-        }
-      }
-
-      typeQuote();
     }
+    setTimeout(typeQuote, deleting ? 40 : 120);
+  } else if (stage === "full") {
+    if (charIndex < fullQuote.length) {
+      output.textContent += fullQuote.charAt(charIndex);
+      charIndex++;
+      setTimeout(typeQuote, 100);
+    } else {
+      // Full quote typed, wait 3s, show Ctrl+A effect hugging text
+      setTimeout(() => {
+        output.innerHTML = `<span class="selected">${fullQuote}</span>`;
+        setTimeout(() => {
+          output.textContent = "";
+          cursor.style.display = "none";
+          asciiWrapper.style.display = "flex";
+          asciiEl.textContent = asciiArt;
+          if (footer) footer.remove();
+          localStorage.setItem("ddruq_seen_quote", "true");
+        }, 800);
+      }, 3000);
+    }
+  }
+}
 
-    document.addEventListener("click", () => {
-      if (audio.muted) {
-        audio.muted = false;
-        audio.play().catch(() => {});
-      }
-    }, { once: true });
-  </script>
-</body>
-</html>
+typeQuote();
+
+document.addEventListener("click", () => {
+  if (audio.muted) {
+    audio.muted = false;
+    audio.play().catch(() => {});
+  }
+}, { once: true });
+</script>
