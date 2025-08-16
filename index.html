@@ -5,41 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>a secret you weren’t meant to find.</title>
 <style>
-  body {
-    background-color: #0d1117;
-    color: #c9d1d9;
-    font-family: monospace;
-    padding: 2em;
-    margin: 0;
-    line-height: 1.6;
-    text-align: left;
-    cursor: pointer;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
+  body { background-color: #0d1117; color: #c9d1d9; font-family: monospace; padding: 2em; margin: 0; line-height: 1.6; text-align: left; cursor: pointer; height: 100vh; display: flex; flex-direction: column; }
   .quote { font-size: 1.4em; white-space: pre-wrap; overflow-wrap: break-word; display: inline; }
-
-  .selected {
-    display: inline; background-color: #3390ff; color: white; padding: 0 2px;
-    border-radius: 2px; line-height: 1.4; white-space: pre-wrap;
-  }
-
+  .selected { display: inline; background-color: #3390ff; color: white; padding: 0 2px; border-radius: 2px; line-height: 1.4; white-space: pre-wrap; }
   .ascii { font-size: 0.48em; line-height: 1.1; white-space: pre-wrap; word-break: break-word; text-align: center; opacity:0; }
-
   .ascii-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; }
-
   .cursor { display: inline-block; background-color: #c9d1d9; width: 8px; height: 1em; vertical-align: bottom; animation: blink 1s step-end infinite; }
-
   @keyframes blink { 50% { background-color: transparent; } }
-
   .footer { margin-top: 4em; font-size: 0.9em; color: #6e7681; }
-
   .title-tag { position: fixed; bottom: 1em; right: 1em; font-size: 0.95em; color: #8b949e; font-style: italic; text-align: right; line-height: 1.4; width: max-content; pointer-events: none; }
-
   .audio-prompt { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(13,17,23,0.9); padding: 0.5em 1em; border: 1px solid #6e7681; border-radius:6px; color:#8b949e; font-size:0.75em; text-align:center; z-index:9999; pointer-events:none; animation:fadeout 1s ease 2s forwards; }
-
   @keyframes fadeout { to { opacity:0; visibility:hidden; } }
 </style>
 </head>
@@ -83,7 +58,6 @@ const asciiWrapper = document.getElementById("asciiWrapper");
 const asciiEl = document.getElementById("asciiArt");
 const footer = document.getElementById("footer");
 
-// Pick random quote
 function pickRandomQuote(exclude="") {
   let q;
   do { q = quotes[Math.floor(Math.random()*quotes.length)]; }
@@ -91,13 +65,13 @@ function pickRandomQuote(exclude="") {
   return q;
 }
 
-// ASCII reveal command
+// Reveal ASCII slowly
 function revealASCII(asciiText, container, delay=25) {
   container.textContent = "";
   container.style.opacity = 1;
   let index = 0;
   function step() {
-    if(index < asciiText.length) {
+    if(index < asciiText.length){
       container.textContent += asciiText.charAt(index);
       index++;
       setTimeout(step, delay);
@@ -106,59 +80,37 @@ function revealASCII(asciiText, container, delay=25) {
   step();
 }
 
-// Show ASCII if already seen
-if(localStorage.getItem("ddruq_seen_quote")) {
-  asciiWrapper.style.display = "flex";
-  revealASCII(asciiArt, asciiEl, 25);
-  if(footer) footer.remove();
-} else {
-  let useTeaser = Math.random() < 0.7;
-  let teaserText = useTeaser ? pickRandomQuote().substr(0, 6 + Math.floor(Math.random()*3)) : "";
-  let fullQuote = pickRandomQuote(teaserText);
+let useTeaser = Math.random() < 0.7;
+let teaserText = useTeaser ? pickRandomQuote().substr(0, 6 + Math.floor(Math.random()*3)) : "";
+let fullQuote = pickRandomQuote(teaserText);
 
-  let charIndex = 0, deleting=false, stage=useTeaser?"teaser":"full";
+let charIndex=0, deleting=false, stage=useTeaser?"teaser":"full";
 
-  function typeQuote() {
-  if(stage === "teaser") {
-    if(!deleting) {
-      output.textContent += teaserText.charAt(charIndex);
+function typeQuote() {
+  if(stage==="teaser"){
+    if(!deleting){ output.textContent+=teaserText.charAt(charIndex); charIndex++; 
+      if(charIndex===teaserText.length){ deleting=true; setTimeout(typeQuote,800); return; } 
+    } else { output.textContent=output.textContent.slice(0,-1); if(output.textContent.length===0){ deleting=false; charIndex=0; stage="full"; } }
+    setTimeout(typeQuote, deleting?40:120+Math.random()*30);
+  } else if(stage==="full"){
+    if(charIndex<fullQuote.length){
+      output.textContent+=fullQuote.charAt(charIndex);
       charIndex++;
-      if(charIndex === teaserText.length) {
-        deleting = true;
-        setTimeout(typeQuote, 800);
-        return;
-      }
-    } else {
-      output.textContent = output.textContent.slice(0,-1);
-      if(output.textContent.length === 0){
-        deleting = false;
-        charIndex = 0;
-        stage = "full";
-      }
-    }
-    setTimeout(typeQuote, deleting ? 40 : 120 + Math.random()*30);
-  } else if(stage === "full") {
-    if(charIndex < fullQuote.length) {
-      output.textContent += fullQuote.charAt(charIndex);
-      charIndex++;
-
-      // Check if the character is punctuation for a subtle pause
       const char = fullQuote.charAt(charIndex-1);
-      let delay = 90 + Math.random()*40; // base random typing delay
-      if(char === "," || char === "—") delay += 150 + Math.random()*50; // slightly longer pause
-      if(char === "." || char === "\n") delay += 250 + Math.random()*100; // even longer pause for sentences/line breaks
-
+      let delay=90+Math.random()*40;
+      if(char==","||char=="—") delay+=150+Math.random()*50;
+      if(char=="."||char=="\n") delay+=250+Math.random()*100;
       setTimeout(typeQuote, delay);
     } else {
-      // Full quote typed, wait 1.5s, Ctrl+A effect
+      // Full quote typed → Ctrl+A highlight after 1.5s
       setTimeout(()=>{
-        output.innerHTML = `<span class="selected">${fullQuote}</span>`;
+        output.innerHTML=`<span class="selected">${fullQuote}</span>`;
         setTimeout(()=>{
-          output.textContent = "";
-          cursor.style.display = "none";
-          asciiWrapper.style.display = "flex";
-          asciiEl.textContent = asciiArt;
+          output.textContent="";
+          cursor.style.display="none";
+          asciiWrapper.style.display="flex";
           if(footer) footer.remove();
+          revealASCII(asciiArt, asciiEl, 25); // ritual-like line by line
           localStorage.setItem("ddruq_seen_quote","true");
         },800);
       },1500);
@@ -166,11 +118,19 @@ if(localStorage.getItem("ddruq_seen_quote")) {
   }
 }
 
+// Show ASCII immediately if quote already seen
+if(localStorage.getItem("ddruq_seen_quote")){
+  output.textContent="";
+  cursor.style.display="none";
+  asciiWrapper.style.display="flex";
+  if(footer) footer.remove();
+  revealASCII(asciiArt, asciiEl, 25);
+} else {
   typeQuote();
 }
 
 // Audio unmute
-const audio = document.getElementById("bg-audio");
+const audio=document.getElementById("bg-audio");
 document.addEventListener("click",()=>{
   if(audio.muted){ audio.muted=false; audio.play().catch(()=>{}); }
 },{once:true});
