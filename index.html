@@ -23,7 +23,7 @@
       font-size: 1.4em;
       white-space: pre-wrap;
       overflow-wrap: break-word;
-      transition: background 0.2s ease;
+      display: inline-block; /* allows background to hug text */
     }
 
     .selected {
@@ -130,14 +130,13 @@
       "i wanted you to speak it aloud,\nto let the veil fall,\nto confess that yesterday was more real\nthan the masks we wear today. \nso why pretend the sun has not risen? \neven shadows admit their devotion to light."
     ];
 
-
     const asciiArt = `
       _    __      ___ __  __  _  
  /  /_|  / _ /  /(_  /__)/__)/_| 
 (__(  | (__)(__/(___/ ( / ( (  | 
 `;
 
- const output = document.getElementById("quote");
+  const output = document.getElementById("quote");
     const cursor = document.querySelector(".cursor");
     const asciiWrapper = document.getElementById("asciiWrapper");
     const asciiEl = document.getElementById("asciiArt");
@@ -193,14 +192,13 @@
             charIndex++;
             setTimeout(typeQuote, 100);
           } else {
-            // Full quote typed, wait 3s, then Ctrl+A effect
+            // Full quote typed, wait 3s, then Ctrl+A effect hugging text
             setTimeout(() => {
-              output.classList.add("selected"); // add blue highlight
+              output.innerHTML = `<span class="selected">${fullQuote}</span>`;
               setTimeout(() => {
-                output.textContent = ""; // clear text
-                output.classList.remove("selected");
+                output.textContent = "";
                 cursor.style.display = "none";
-              }, 800); // short delay to show selection
+              }, 800); // show selection briefly
             }, 3000);
           }
         }
