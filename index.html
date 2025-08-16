@@ -18,90 +18,23 @@
     display: flex;
     flex-direction: column;
   }
-
-  .quote {
-    font-size: 1.4em;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-    display: inline; /* hug text for selection */
-  }
-
+  .quote { font-size: 1.4em; white-space: pre-wrap; overflow-wrap: break-word; display: inline; }
   .selected {
-    display: inline-block;        /* hug text */
-    background-color: #3390ff;    /* blue highlight */
+    display: inline-block;
+    background-color: #3390ff;
     color: white;
-    padding: 0 2px;               /* slight padding */
+    padding: 0 2px;
     line-height: 1.4;
     border-radius: 2px;
   }
-
-  .ascii {
-    font-size: 0.48em;
-    line-height: 1.1;
-    white-space: pre-wrap;
-    word-break: break-word;
-    text-align: center;
-  }
-
-  .ascii-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .cursor {
-    display: inline-block;
-    background-color: #c9d1d9;
-    width: 8px;
-    height: 1em;
-    vertical-align: bottom;
-    animation: blink 1s step-end infinite;
-  }
-
-  @keyframes blink {
-    50% { background-color: transparent; }
-  }
-
-  .footer {
-    margin-top: 4em;
-    font-size: 0.9em;
-    color: #6e7681;
-  }
-
-  .title-tag {
-    position: fixed;
-    bottom: 1em;
-    right: 1em;
-    font-size: 0.95em;
-    color: #8b949e;
-    font-style: italic;
-    text-align: right;
-    line-height: 1.4;
-    width: max-content;
-    pointer-events: none;
-  }
-
-  .audio-prompt {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(13, 17, 23, 0.9);
-    padding: 0.5em 1em;
-    border: 1px solid #6e7681;
-    border-radius: 6px;
-    color: #8b949e;
-    font-size: 0.75em;
-    text-align: center;
-    z-index: 9999;
-    pointer-events: none;
-    animation: fadeout 1s ease 2s forwards;
-  }
-
-  @keyframes fadeout {
-    to { opacity: 0; visibility: hidden; }
-  }
+  .ascii { font-size: 0.48em; line-height: 1.1; white-space: pre-wrap; word-break: break-word; text-align: center; }
+  .ascii-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; }
+  .cursor { display: inline-block; background-color: #c9d1d9; width: 8px; height: 1em; vertical-align: bottom; animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { background-color: transparent; } }
+  .footer { margin-top: 4em; font-size: 0.9em; color: #6e7681; }
+  .title-tag { position: fixed; bottom: 1em; right: 1em; font-size: 0.95em; color: #8b949e; font-style: italic; text-align: right; line-height: 1.4; width: max-content; pointer-events: none; }
+  .audio-prompt { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(13, 17, 23, 0.9); padding: 0.5em 1em; border: 1px solid #6e7681; border-radius: 6px; color: #8b949e; font-size: 0.75em; text-align: center; z-index: 9999; pointer-events: none; animation: fadeout 1s ease 2s forwards; }
+  @keyframes fadeout { to { opacity: 0; visibility: hidden; } }
 </style>
 </head>
 <body>
@@ -113,7 +46,6 @@
 <div class="footer" id="footer">scan quietly. it's not for everyone.</div>
 <div class="title-tag">done, done redeeming unfaithful qualities</div>
 <div class="audio-prompt" id="audioPrompt">click anywhere to unmute</div>
-
 <audio id="bg-audio" autoplay loop muted playsinline>
   <source src="ambient.mp3" type="audio/mpeg" />
 </audio>
@@ -121,25 +53,15 @@
 <script>
 const quotes = [
   "you parted your lips like it was sacred.\neven in silence, my kisses never let you second guess.\ni moved like someone who knew the way.\nand still, you told me: slower so it stain.",
-  
   "i undressed like a confession.\nyou stayed like absolution.\nthere was no shame between us,\njust skin learning how to say: \nlet me be all yours.",
-  
   "i feel you wanting more—\nto crawl into the hollowness beneath my ribs,\nto echo inside me\nlike I’m echoing inside you.",
-  
   "we talked\nuntil the sun appeared—\neach blink layered\nwith chuckles,\nknowing it’s finally here.",
-  
   "i want to tell you something—\nwith my tongue,\nwith my hands,\nwith the way our bodies slow-dance.",
-  
   "i kiss a line down your belly\nas your legs part on instinct.\nyour breath stutters—\nyou beg me to take all of it,\nand i do, as you plead.",
-  
   "don’t cum just yet.\ni want to stay in this ache with you.\nin this pause between need and surrender.\nthis is the closest i’ve felt to safety.",
-  
   "your smile seasons the food.\nyour hands wash every dish\nlike they’re cleansing something \nsacred than this meal.",
-  
   "i didn’t need to ask.\nyou just curled into me like you always belonged.\nmy hand on your lower back.\nyour breath undoing every apology i rehearsed.",
-  
   "i compliment you\non the tattoo across your lips —\nafraid your mom would see.\nlet my breath become a breeze —\nhugging your smile forever.",
-  
   "i wanted you to speak it aloud,\nto let the veil fall,\nto confess that yesterday was more real\nthan the masks we wear today. \nso why pretend the sun has not risen? \neven shadows admit their devotion to light."
 ];
     const asciiArt = `
@@ -153,6 +75,7 @@ const cursor = document.querySelector(".cursor");
 const asciiWrapper = document.getElementById("asciiWrapper");
 const asciiEl = document.getElementById("asciiArt");
 const footer = document.getElementById("footer");
+const audio = document.getElementById("bg-audio");
 
 function pickRandomQuote(exclude="") {
   let q;
@@ -161,15 +84,15 @@ function pickRandomQuote(exclude="") {
   return q;
 }
 
-// Check localStorage: normal browser shows ASCII on refresh
+// Check localStorage: normal browser refresh shows ASCII immediately
 if(localStorage.getItem("ddruq_seen_quote")) {
   asciiWrapper.style.display = "flex";
   asciiEl.textContent = asciiArt;
   if(footer) footer.remove();
 } else {
-  // 50% chance of teaser
+  // 50% chance teaser
   let useTeaser = Math.random() < 0.5;
-  let teaserText = useTeaser ? pickRandomQuote().substr(0, 6 + Math.floor(Math.random() * 3)) : "";
+  let teaserText = useTeaser ? pickRandomQuote().substr(0,6 + Math.floor(Math.random()*3)) : "";
   let fullQuote = pickRandomQuote(teaserText);
 
   let charIndex = 0;
@@ -178,31 +101,31 @@ if(localStorage.getItem("ddruq_seen_quote")) {
 
   function typeQuote() {
     if(stage === "teaser") {
-      if(!deleting) {
+      if(!deleting){
         output.textContent += teaserText.charAt(charIndex);
         charIndex++;
-        if(charIndex === teaserText.length) {
+        if(charIndex === teaserText.length){
           deleting = true;
-          setTimeout(typeQuote, 800);
+          setTimeout(typeQuote,800);
           return;
         }
       } else {
         output.textContent = output.textContent.slice(0,-1);
-        if(output.textContent.length === 0){
-          deleting = false;
-          charIndex = 0;
-          stage = "full";
+        if(output.textContent.length===0){
+          deleting=false;
+          charIndex=0;
+          stage="full";
         }
       }
-      setTimeout(typeQuote, deleting ? 40 : 120);
-    } else if(stage === "full") {
-      if(charIndex < fullQuote.length) {
+      setTimeout(typeQuote, deleting?40:120);
+    } else if(stage==="full"){
+      if(charIndex < fullQuote.length){
         output.textContent += fullQuote.charAt(charIndex);
         charIndex++;
-        setTimeout(typeQuote, 100);
+        setTimeout(typeQuote,100);
       } else {
-        // Full quote typed, wait 3s, Ctrl+A effect
         setTimeout(()=>{
+          // Ctrl+A hug text
           output.innerHTML = `<span class="selected">${fullQuote}</span>`;
           setTimeout(()=>{
             output.textContent = "";
@@ -220,10 +143,10 @@ if(localStorage.getItem("ddruq_seen_quote")) {
   typeQuote();
 }
 
-// Audio unmute on click
+// Audio unmute
 document.addEventListener("click", () => {
   if(audio.muted){
-    audio.muted = false;
+    audio.muted=false;
     audio.play().catch(()=>{});
   }
 },{once:true});
