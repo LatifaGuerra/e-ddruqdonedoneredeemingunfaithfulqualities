@@ -23,11 +23,11 @@
       font-size: 1.4em;
       white-space: pre-wrap;
       overflow-wrap: break-word;
-      display: inline-block; /* hug text background */
+      display: inline; /* hug text for selection */
     }
 
     .selected {
-      background-color: #3390ff; /* blue selection */
+      background-color: #3390ff; /* blue highlight */
       color: white;
     }
 
@@ -137,7 +137,7 @@
 (__(  | (__)(__/(___/ ( / ( (  | 
 `;
 
- const output = document.getElementById("quote");
+const output = document.getElementById("quote");
     const cursor = document.querySelector(".cursor");
     const asciiWrapper = document.getElementById("asciiWrapper");
     const asciiEl = document.getElementById("asciiArt");
@@ -153,18 +153,21 @@
       asciiEl.textContent = asciiArt;
       if (footer) footer.remove();
     } else {
-
-      // 50% chance of teaser
+      // 50% chance for teaser
       let useTeaser = Math.random() < 0.5;
 
-      // Pick teaser from beginning of a random quote
-      let teaserText = useTeaser ? quotes[Math.floor(Math.random() * quotes.length)].substr(0, 6 + Math.floor(Math.random() * 3)) : "";
-
-      // Pick full quote different from teaser
+      let teaserText = "";
       let fullQuote;
-      do {
+
+      if (useTeaser) {
+        const teaserQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        teaserText = teaserQuote.substr(0, 6 + Math.floor(Math.random() * 3));
+        do {
+          fullQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        } while (fullQuote === teaserQuote);
+      } else {
         fullQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      } while (teaserText && fullQuote.startsWith(teaserText));
+      }
 
       let charIndex = 0;
       let deleting = false;
@@ -196,20 +199,21 @@
             charIndex++;
             setTimeout(typeQuote, 100);
           } else {
-            // Full quote typed, wait 3s, then Ctrl+A effect hugging text
+            // Full quote typed, wait 3s, then Ctrl+A highlight
             setTimeout(() => {
               output.innerHTML = `<span class="selected">${fullQuote}</span>`;
               setTimeout(() => {
                 output.textContent = "";
                 cursor.style.display = "none";
-              }, 800); // show selection briefly
+                // mark seen after full animation
+                localStorage.setItem("ddruq_seen_quote", "true");
+              }, 800); // show highlight briefly
             }, 3000);
           }
         }
       }
 
       typeQuote();
-      localStorage.setItem("ddruq_seen_quote", "true");
     }
 
     document.addEventListener("click", () => {
